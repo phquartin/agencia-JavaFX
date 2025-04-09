@@ -8,6 +8,6 @@ module com.agencia.project {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
 
-    opens com.agencia.project.test to javafx.fxml;
-    exports com.agencia.project.test;
+    opens com.agencia.project to javafx.fxml;
+    exports com.agencia.project;
 }
