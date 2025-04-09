@@ -117,28 +117,8 @@ public class FormularioApp extends Application {
 
         Scene scene = new Scene(root, 450, 400);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
-        primaryStage.setTitle("Formulário Moderno");
+        primaryStage.setTitle("Formulário");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    private static int getIdade(String email, TextField idadeField) throws Exception {
-        if (!email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-            throw new Exception("O e-mail fornecido é inválido.");
-        }
-
-        String idadeStr = idadeField.getText().trim();
-        if (!idadeStr.matches("^\\d+$")) {
-            throw new Exception("A idade deve conter apenas números.");
-        }
-        int idade = Integer.parseInt(idadeStr);
-        if (idade < 18 || idade > 130) {
-            throw new Exception("A idade deve estar entre 18 e 130.");
-        }
-        return idade;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
