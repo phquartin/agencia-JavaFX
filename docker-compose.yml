@@ -1,15 +1,15 @@
 services:
   mysql:
-    image: mysql:8.0 # versão do MySQL, pode trocar se quiser
+    image: mysql:8.0
     container_name: javafx_container
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root  # define a senha do usuário root
-      MYSQL_DATABASE: agencia_data              # cria um banco de dados automaticamente
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: agencia_data
     ports:
-      - "3309:3306"  # mapeia a porta do container para sua máquina
+      - "3309:3306"
     volumes:
-      - mysql_data:/var/lib/mysql  # volume para persistir os dados
+      - mysql_data:/var/lib/mysql
 
 volumes:
   mysql_data:
