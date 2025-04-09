@@ -2,6 +2,8 @@ package com.agencia.project;
 
 import com.agencia.project.model.client.ClientModel;
 import com.agencia.project.model.client.Nationality;
+import com.agencia.project.validation.*;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -53,47 +55,22 @@ public class FormularioApp extends Application {
         enviarButton.setStyle("-fx-font-size: 16; -fx-background-color: #4caf50; -fx-text-fill: white; -fx-padding: 10;");
         enviarButton.setOnAction(event -> {
             try {
-                // Validação do nome
+                // Validações usando os validadores
                 String nome = nomeField.getText().trim();
-                if (!nome.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
-                    throw new Exception("O nome deve conter apenas letras.");
-                }
+                NameValidator.validate(nome);
 
-                // Validação da idade
                 String idadeStr = idadeField.getText().trim();
-                if (!idadeStr.matches("^\\d+$")) {
-                    throw new Exception("A idade deve conter apenas números.");
-                }
-                int idade = Integer.parseInt(idadeStr);
-                if (idade < 18 || idade > 130) {
-                    throw new Exception("A idade deve estar entre 18 e 130.");
-                }
+                AgeValidator.validate(idadeStr);
 
-                // Validação do e-mail
                 String email = emailField.getText().trim();
-                if (!email.matches("^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-                    throw new Exception("O e-mail fornecido é inválido.");
-                }
+                EmailValidator.validate(email);
 
-                // Validação do documento
                 String nacionalidadeStr = nacionalidadeCombo.getValue();
                 String documento = documentoField.getText().trim();
-                switch (nacionalidadeStr){
-                    case "Nacional":
-                        if (!documento.matches("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$")) {
-                            throw new Exception("O CPF fornecido é inválido.");
-                        }
-                        break;
-                    case "Estrangeiro":
-                        if (!documento.matches("^[A-Z]{2}\\d{6,9}$")) {
-                            throw new Exception("O Passaporte fornecido é inválido.");
-                        }
-                        break;
-                    default:
-                        throw new Exception("Nacionalidade não reconhecida.");
-                }
+                DocumentValidator.validate(nacionalidadeStr, documento);
 
-                // Dados válidos! Criar instância do cliente
+                // Dados válidos, criar instância do cliente
+                int idade = Integer.parseInt(idadeStr);
                 Nationality nacionalidade = "Nacional".equals(nacionalidadeStr) ? Nationality.NACIONAL : Nationality.ESTRANGEIRO;
                 ClientModel client = new ClientModel(nome, idade, email, documento, nacionalidade);
 
@@ -111,6 +88,7 @@ public class FormularioApp extends Application {
                 alert.showAndWait();
             }
         });
+
 
 
         root.getChildren().addAll(nomeField, emailField, idadeField, nacionalidadeCombo, documentoField, enviarButton);
