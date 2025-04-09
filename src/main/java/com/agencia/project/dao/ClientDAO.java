@@ -2,21 +2,18 @@ package com.agencia.project.dao;
 
 import com.agencia.project.model.client.ClientModel;
 import com.agencia.project.model.client.Nationality;
-import com.agencia.project.util.conn.ConnectionFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static com.agencia.project.util.conn.ConnectionFactory.getConnection;
 
 // TODO: LOG4J + Lombok
 
-public class ClientDAO {
+public final class ClientDAO {
 
     // Criação de um cliente, retorna o ID.
-    public int createClient(ClientModel client) {
+    public static void createClient(ClientModel client) {
         String sql = "INSERT INTO tb_clients (name, age, email, document, nationality) VALUES (?,?,?,?,?)";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -27,26 +24,14 @@ public class ClientDAO {
             stmt.setString(4, client.getDocument());
             stmt.setString(5, client.getNationality() == Nationality.NACIONAL ? "Nacional" : "Estrangeiro");
 
-            int affectedRows = stmt.executeUpdate();
-
-            // Erro inesperado
-            if (affectedRows == 0) throw new SQLException("A criação do cliente falhou, nenhuma linha afetada.");
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("A criação do cliente falhou, ID não obtido.");
-                }
-            }
+            stmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("A criação do cliente falhou " + e.getMessage());
         }
-        return 0;
     }
 
     // Recuperação (SELECT) de um cliente pelo ID.
-    public Optional<ClientModel> readClientById(int id) {
+    public static Optional<ClientModel> readClientById(int id) {
         String sql = "SELECT * FROM tb_clients WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -73,7 +58,7 @@ public class ClientDAO {
     }
 
     // Atualização (UPDATE) dos dados de um cliente.
-    public boolean updateClient(ClientModel client) {
+    public static void updateClient(ClientModel client) {
         String sql = "UPDATE tb_clients SET name = ?, age = ?, email = ?, document = ?, nationality = ? WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -85,26 +70,22 @@ public class ClientDAO {
             stmt.setString(6, client.getNationality() == Nationality.NACIONAL ? "Nacional" : "Estrangeiro");
             stmt.setInt(7, client.getId());
 
-            int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
+            stmt.executeUpdate();
         } catch (SQLException e){
             System.out.println("Erro ao atualizar cliente " + e.getMessage());
-            return false;
         }
     }
 
     // Exclusão (DELETE) de um cliente pelo ID.
-    public boolean deleteClient(int id) {
+    public static void deleteClient(int id) {
         String sql = "DELETE FROM tb_clients WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
+            stmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Erro ao excluir cliente " + e.getMessage());
-            return false;
         }
     }
 }
