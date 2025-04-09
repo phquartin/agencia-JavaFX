@@ -45,58 +45,93 @@ public class FormularioApp extends Application {
             if ("Estrangeiro".equals(nacionalidade)) {
                 documentoField.setDisable(false);
                 documentoField.setPromptText("Passaporte");
+                // Remove o listener (se houver) para evitar comportamento desnecessário
+                documentoField.textProperty().removeListener((observable, oldValue, newValue) -> {});
             } else if ("Nacional".equals(nacionalidade)) {
                 documentoField.setDisable(false);
                 documentoField.setPromptText("CPF");
+
+                // Remove qualquer listener existente antes de adicionar um novo
+                documentoField.textProperty().removeListener((observable, oldValue, newValue) -> {});
+
+                // Adiciona o listener para formatação do CPF
+                documentoField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    // Remove caracteres não numéricos
+                    String numericValue = newValue.replaceAll("\\D", "");
+
+                    // Limita a 11 dígitos
+                    if (numericValue.length() > 11) {
+                        numericValue = numericValue.substring(0, 11);
+                    }
+
+                    // Verifica se os 11 dígitos foram digitados e aplica a formatação
+                    if (numericValue.length() == 11) {
+                        StringBuilder formattedValue = getFormattedValue(numericValue);
+                        documentoField.setText(formattedValue.toString());
+                    }
+                });
             }
         });
+
 
         Button enviarButton = new Button("Enviar");
-        enviarButton.setStyle("-fx-font-size: 16; -fx-background-color: #4caf50; -fx-text-fill: white; -fx-padding: 10;");
-        enviarButton.setOnAction(event -> {
-            try {
-                // Validações usando os validadores
-                String nome = nomeField.getText().trim();
-                NameValidator.validate(nome);
+            enviarButton.setStyle("-fx-font-size: 16; -fx-background-color: #4caf50; -fx-text-fill: white; -fx-padding: 10;");
+            enviarButton.setOnAction(event -> {
+                try {
+                    // Validações usando os validadores
+                    String nome = nomeField.getText().trim();
+                    NameValidator.validate(nome);
 
-                String idadeStr = idadeField.getText().trim();
-                AgeValidator.validate(idadeStr);
+                    String idadeStr = idadeField.getText().trim();
+                    AgeValidator.validate(idadeStr);
 
-                String email = emailField.getText().trim();
-                EmailValidator.validate(email);
+                    String email = emailField.getText().trim();
+                    EmailValidator.validate(email);
 
-                String nacionalidadeStr = nacionalidadeCombo.getValue();
-                String documento = documentoField.getText().trim();
-                DocumentValidator.validate(nacionalidadeStr, documento);
+                    String nacionalidadeStr = nacionalidadeCombo.getValue();
+                    String documento = documentoField.getText().trim();
+                    DocumentValidator.validate(nacionalidadeStr, documento);
 
-                // Dados válidos, criar instância do cliente
-                int idade = Integer.parseInt(idadeStr);
-                Nationality nacionalidade = "Nacional".equals(nacionalidadeStr) ? Nationality.NACIONAL : Nationality.ESTRANGEIRO;
-                ClientModel client = new ClientModel(nome, idade, email, documento, nacionalidade);
+                    // Dados válidos, criar instância do cliente
+                    int idade = Integer.parseInt(idadeStr);
+                    Nationality nacionalidade = "Nacional".equals(nacionalidadeStr) ? Nationality.NACIONAL : Nationality.ESTRANGEIRO;
+                    ClientModel client = new ClientModel(nome, idade, email, documento, nacionalidade);
 
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Formulário Enviado");
-                alert.setHeaderText(null);
-                alert.setContentText("Cliente criado com sucesso:\n" + client);
-                alert.showAndWait();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Formulário Enviado");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Cliente criado com sucesso:\n" + client);
+                    alert.showAndWait();
 
-            } catch (Exception e) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erro");
-                alert.setHeaderText(null);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erro");
+                    alert.setHeaderText(null);
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                }
+            });
+
+
+            root.getChildren().addAll(nomeField, emailField, idadeField, nacionalidadeCombo, documentoField, enviarButton);
+
+            Scene scene = new Scene(root, 450, 400);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
+            primaryStage.setTitle("Formulário");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+
+    private static StringBuilder getFormattedValue(String numericValue) {
+        StringBuilder formattedValue = new StringBuilder();
+        for (int i = 0; i < numericValue.length(); i++) {
+            formattedValue.append(numericValue.charAt(i));
+            if (i == 2 || i == 5) {
+                formattedValue.append("."); // Adiciona ponto
+            } else if (i == 8) {
+                formattedValue.append("-"); // Adiciona traço
             }
-        });
-
-
-
-        root.getChildren().addAll(nomeField, emailField, idadeField, nacionalidadeCombo, documentoField, enviarButton);
-
-        Scene scene = new Scene(root, 450, 400);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
-        primaryStage.setTitle("Formulário");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        }
+        return formattedValue;
     }
 }
