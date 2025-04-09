@@ -8,6 +8,9 @@ module com.agencia.project {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
+    requires mysql.connector.j;
+    requires org.apache.logging.log4j;
+    requires org.apache.logging.log4j.core;
 
     opens com.agencia.project to javafx.fxml;
     exports com.agencia.project;
