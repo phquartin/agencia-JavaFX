@@ -16,7 +16,7 @@ public final class ClientDAO {
     public static void createClient(ClientModel client) {
         String sql = "INSERT INTO tb_clients (name, age, email, document, nationality) VALUES (?,?,?,?,?)";
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, client.getName());
             stmt.setInt(2, client.getAge());
