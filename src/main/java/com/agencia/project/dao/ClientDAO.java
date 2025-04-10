@@ -67,8 +67,8 @@ public final class ClientDAO {
             stmt.setInt(2, client.getAge());
             stmt.setString(3, client.getEmail());
             stmt.setString(4, client.getDocument());
-            stmt.setString(6, client.getNationality() == Nationality.NACIONAL ? "Nacional" : "Estrangeiro");
-            stmt.setInt(7, client.getId());
+            stmt.setString(5, client.getNationality() == Nationality.NACIONAL ? "Nacional" : "Estrangeiro");
+            stmt.setInt(6, client.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e){
