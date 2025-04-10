@@ -16,29 +16,29 @@ public final class DataInicialization {
                 name VARCHAR(100) NOT NULL UNIQUE
             );
             CREATE TABLE tb_country (
-                id INT AUTO_INCREMENT PRIMARY KEY, 
-                name VARCHAR(100) NOT NULL UNIQUE, 
-                language VARCHAR(255) NULL, 
-                id_continent INT, 
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) NOT NULL UNIQUE,
+                language VARCHAR(50) NULL,
+                id_continent INT,
                 FOREIGN KEY (id_continent) REFERENCES tb_continentes(id) ON DELETE CASCADE
             );
             CREATE TABLE tb_destinations (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(100) NOT NULL UNIQUE,
                 description TEXT NULL,
-                id_country INT, 
+                id_country INT NOT NULL,
                 FOREIGN KEY (id_country) REFERENCES tb_country(id) ON DELETE CASCADE
             );
             CREATE TABLE tb_vacation_packages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(100) NOT NULL, 
-                days INT NOT NULL, 
+                name VARCHAR(100) NOT NULL,
+                days INT NOT NULL,
                 price DECIMAL(10,2) NOT NULL,
                 package_type VARCHAR(30) NOT NULL
             );
             CREATE TABLE tb_packages_destinations (
-                id_vacation_package INT, 
-                id_destination INT, 
+                id_vacation_package INT,
+                id_destination INT,
                 PRIMARY KEY (id_vacation_package, id_destination),
                 FOREIGN KEY (id_vacation_package) REFERENCES tb_vacation_packages(id) ON DELETE CASCADE,
                 FOREIGN KEY (id_destination) REFERENCES tb_destinations(id) ON DELETE CASCADE
@@ -46,27 +46,27 @@ public final class DataInicialization {
             CREATE TABLE tb_clients (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(100) NOT NULL,
-                age INT NOT NULL, 
-                email VARCHAR(50) NOT NULL, 
-                document VARCHAR(15) NOT NULL,
+                age INT NOT NULL,
+                email VARCHAR(50) NOT NULL UNIQUE,
+                document VARCHAR(15) NOT NULL UNIQUE,
                 nationality VARCHAR(12) NOT NULL
             );
             CREATE TABLE tb_clients_packages (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 id_client INT NOT NULL,
-                id_vacation_package INT NOT NULL, 
+                id_vacation_package INT NOT NULL,
                 start_date DATE NOT NULL,
                 FOREIGN KEY (id_client) REFERENCES tb_clients(id) ON DELETE CASCADE,
                 FOREIGN KEY (id_vacation_package) REFERENCES tb_vacation_packages(id) ON DELETE CASCADE
             );
             CREATE TABLE tb_services (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(100) NOT NULL, 
-                price DECIMAL(10,2) NOT NULL 
+                name VARCHAR(100) NOT NULL,
+                price DECIMAL(10,2) NOT NULL
             );
             CREATE TABLE tb_purchase (
                 id_client_package INT PRIMARY KEY ,
-                id_service INT, 
+                id_service INT,
                 FOREIGN KEY (id_client_package) REFERENCES tb_clients_packages(id)
             );
             """;
