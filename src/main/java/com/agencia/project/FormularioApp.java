@@ -2,6 +2,7 @@ package com.agencia.project;
 
 import com.agencia.project.model.client.ClientModel;
 import com.agencia.project.model.client.Nationality;
+import com.agencia.project.service.ClientService;
 import com.agencia.project.validation.*;
 
 import javafx.application.Application;
@@ -100,8 +101,10 @@ public class FormularioApp extends Application {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Formulário Enviado");
                     alert.setHeaderText(null);
-                    alert.setContentText("Cliente criado com sucesso:\n" + client);
+                    alert.setContentText("Cliente criado com sucesso");
                     alert.showAndWait();
+
+                    ClientService.save(client);
 
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
