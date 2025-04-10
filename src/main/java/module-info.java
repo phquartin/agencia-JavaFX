@@ -11,6 +11,7 @@ module com.agencia.project {
     requires mysql.connector.j;
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.core;
+    requires static lombok;
 
     opens com.agencia.project to javafx.fxml;
     exports com.agencia.project;
