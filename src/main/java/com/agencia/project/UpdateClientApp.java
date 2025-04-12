@@ -64,7 +64,7 @@ public class UpdateClientApp extends Application {
             //TODO: VALIDATIONS NOS APPS
         atualizarButton.setOnAction(event -> {
             try {
-                Integer id = Integer.parseInt(idField.getText().trim());
+                Long id = Long.parseLong(idField.getText().trim());
                 String nome = nomeField.getText().trim();
                 String email = emailField.getText().trim();
                 int idade = Integer.parseInt(idadeField.getText().trim());
@@ -72,7 +72,14 @@ public class UpdateClientApp extends Application {
                 String documento = documentoField.getText().trim();
                 Nationality nationality = nacionalidadeStr.equals("Nacional") ? Nationality.NACIONAL : Nationality.ESTRANGEIRO;
 
-                ClientModel client = new ClientModel(id, nome, idade, email, documento, nationality);
+                ClientModel client = ClientModel.builder()
+                        .id(id)
+                        .name(nome)
+                        .age(idade)
+                        .email(email)
+                        .document(documento)
+                        .nationality(nationality)
+                        .build();
                 ClientService.update(client); // Substitua pelo DAO se necessário.
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso");
