@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public final class DataInicialization {
 
     private static final String[] SQL_COMMANDS = {
-            "CREATE TABLE tb_continents (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL UNIQUE)",
+            "CREATE TABLE tb_continents (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(18) NOT NULL UNIQUE)",
             "CREATE TABLE tb_countries (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL UNIQUE, language VARCHAR(50) NULL, id_continent BIGINT, FOREIGN KEY (id_continent) REFERENCES tb_continents(id) ON DELETE CASCADE)",
             "CREATE TABLE tb_destinations (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL UNIQUE, description TEXT NULL, id_country BIGINT NOT NULL, FOREIGN KEY (id_country) REFERENCES tb_countries(id) ON DELETE CASCADE)",
             "CREATE TABLE tb_vacation_packages (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT NULL, days INT NOT NULL, price DECIMAL(10,2) NOT NULL, package_type VARCHAR(30) NOT NULL)",
