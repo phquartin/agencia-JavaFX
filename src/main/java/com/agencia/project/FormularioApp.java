@@ -80,23 +80,29 @@ public class FormularioApp extends Application {
             enviarButton.setOnAction(event -> {
                 try {
                     // Validações usando os validadores
-                    String nome = nomeField.getText().trim();
-                    NameValidator.validate(nome);
+                    String name = nomeField.getText().trim();
+                    NameValidator.validate(name);
 
-                    String idadeStr = idadeField.getText().trim();
-                    AgeValidator.validate(idadeStr);
+                    String ageStr = idadeField.getText().trim();
+                    AgeValidator.validate(ageStr);
 
                     String email = emailField.getText().trim();
                     EmailValidator.validate(email);
 
-                    String nacionalidadeStr = nacionalidadeCombo.getValue();
-                    String documento = documentoField.getText().trim();
-                    DocumentValidator.validate(nacionalidadeStr, documento);
+                    String nationalityStr = nacionalidadeCombo.getValue();
+                    String document = documentoField.getText().trim();
+                    DocumentValidator.validate(nationalityStr, document);
 
                     // Dados válidos, criar instância do cliente
-                    int idade = Integer.parseInt(idadeStr);
-                    Nationality nacionalidade = "Nacional".equals(nacionalidadeStr) ? Nationality.NACIONAL : Nationality.ESTRANGEIRO;
-                    ClientModel client = new ClientModel(nome, idade, email, documento, nacionalidade);
+                    int age = Integer.parseInt(ageStr);
+                    Nationality nationality = "Nacional".equals(nationalityStr) ? Nationality.NACIONAL : Nationality.ESTRANGEIRO;
+                    ClientModel client = ClientModel.builder()
+                            .name(name)
+                            .age(age)
+                            .email(email)
+                            .document(document)
+                            .nationality(nationality)
+                            .build();
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Formulário Enviado");
@@ -130,9 +136,9 @@ public class FormularioApp extends Application {
         for (int i = 0; i < numericValue.length(); i++) {
             formattedValue.append(numericValue.charAt(i));
             if (i == 2 || i == 5) {
-                formattedValue.append("."); // Adiciona ponto
+                formattedValue.append(".");
             } else if (i == 8) {
-                formattedValue.append("-"); // Adiciona traço
+                formattedValue.append("-");
             }
         }
         return formattedValue;

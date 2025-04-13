@@ -28,7 +28,7 @@ public class ReadClientApp extends Application {
         buscarButton.setOnAction(event -> {
             try {
                 int id = Integer.parseInt(idField.getText().trim());
-                ClientModel client = ClientService.findById(id); // Substitua pelo DAO se necessário.
+                ClientModel client = ClientService.findById(id);
 
                 resultadoArea.setText("ID: " + client.getId() + "\n" +
                         "Nome: " + client.getName() + "\n" +

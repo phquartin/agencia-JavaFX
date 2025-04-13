@@ -45,7 +45,7 @@ public class UpdateClientApp extends Application {
         buscarButton.setOnAction(event -> {
             try {
                 int id = Integer.parseInt(idField.getText().trim());
-                ClientModel client = ClientService.findById(id); // Substitua pelo DAO se necessário.
+                ClientModel client = ClientService.findById(id);
 
                 nomeField.setText(client.getName());
                 idadeField.setText(String.valueOf(client.getAge()));
@@ -80,7 +80,7 @@ public class UpdateClientApp extends Application {
                         .document(documento)
                         .nationality(nationality)
                         .build();
-                ClientService.update(client); // Substitua pelo DAO se necessário.
+                ClientService.update(client);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Sucesso");
                 alert.setHeaderText(null);

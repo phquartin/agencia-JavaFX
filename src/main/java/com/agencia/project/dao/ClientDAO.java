@@ -18,11 +18,7 @@ public final class ClientDAO {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, client.getName());
-            stmt.setInt(2, client.getAge());
-            stmt.setString(3, client.getEmail());
-            stmt.setString(4, client.getDocument());
-            stmt.setString(5, client.getNationality() == Nationality.NACIONAL ? "Nacional" : "Estrangeiro");
+            setClient(client, stmt);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -31,12 +27,12 @@ public final class ClientDAO {
     }
 
     // Recuperação (SELECT) de um cliente pelo ID.
-    public static Optional<ClientModel> readClientById(int id) {
+    public static Optional<ClientModel> readClientById(long id) {
         String sql = "SELECT * FROM tb_clients WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 String name = rs.getString("name");
@@ -46,9 +42,14 @@ public final class ClientDAO {
                 String document = rs.getString("document");
 
                 rs.close();
-                //TODO: MODIFICAR PARA O PADRÃO BUILDER
-                return Optional.of(new ClientModel(id, name, age, email, document,
-                        nationality.equals("Nacional") ? Nationality.NACIONAL : Nationality.ESTRANGEIRO));
+                return Optional.of(ClientModel.builder()
+                        .id(id)
+                        .name(name)
+                        .age(age)
+                        .email(email)
+                        .document(document)
+                        .nationality(nationality.equals("Nacional") ? Nationality.NACIONAL : Nationality.ESTRANGEIRO)
+                        .build());
             }
         } catch (SQLException e) {
             System.out.println("A consulta do cliente falhou id " + id + " | " + e.getMessage());
@@ -63,12 +64,8 @@ public final class ClientDAO {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, client.getName());
-            stmt.setInt(2, client.getAge());
-            stmt.setString(3, client.getEmail());
-            stmt.setString(4, client.getDocument());
-            stmt.setString(5, client.getNationality() == Nationality.NACIONAL ? "Nacional" : "Estrangeiro");
-            stmt.setInt(6, client.getId());
+            setClient(client, stmt);
+            stmt.setLong(6, client.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e){
@@ -77,15 +74,25 @@ public final class ClientDAO {
     }
 
     // Exclusão (DELETE) de um cliente pelo ID.
-    public static void deleteClient(int id) {
+    public static void deleteClient(long id) {
         String sql = "DELETE FROM tb_clients WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Erro ao excluir cliente " + e.getMessage());
         }
     }
+
+    // Auxiliar os metodos update e crate
+    private static void setClient(ClientModel client, PreparedStatement stmt) throws SQLException {
+        stmt.setString(1, client.getName());
+        stmt.setInt(2, client.getAge());
+        stmt.setString(3, client.getEmail());
+        stmt.setString(4, client.getDocument());
+        stmt.setString(5, client.getNationality() == Nationality.NACIONAL ? "Nacional" : "Estrangeiro");
+    }
+
 }
