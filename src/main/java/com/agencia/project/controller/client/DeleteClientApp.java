@@ -1,4 +1,4 @@
-package com.agencia.project;
+package com.agencia.project.controller.client;
 
 import com.agencia.project.service.ClientService; // Comente aqui: Você pode usar o ClientService para chamar o DAO.
 import javafx.application.Application;

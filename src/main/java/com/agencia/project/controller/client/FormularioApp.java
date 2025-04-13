@@ -1,4 +1,4 @@
-package com.agencia.project;
+package com.agencia.project.controller.client;
 
 import com.agencia.project.model.client.ClientModel;
 import com.agencia.project.model.client.Nationality;

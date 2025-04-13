@@ -1,5 +1,6 @@
 package com.agencia.project;
 
+import com.agencia.project.controller.client.CrudMenuApp;
 import com.agencia.project.util.initdb.DataInicialization;
 import javafx.application.Application;
 import javafx.scene.Scene;

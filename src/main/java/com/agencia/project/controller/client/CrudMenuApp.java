@@ -1,4 +1,4 @@
-package com.agencia.project;
+package com.agencia.project.controller.client;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

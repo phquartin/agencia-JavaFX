@@ -15,4 +15,6 @@ module com.agencia.project {
 
     opens com.agencia.project to javafx.fxml;
     exports com.agencia.project;
+    exports com.agencia.project.controller.client;
+    opens com.agencia.project.controller.client to javafx.fxml;
 }
